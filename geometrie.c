@@ -76,7 +76,7 @@ float aire(Point A, Point B, Point C, Point D){
 float aire_triangle_isocele_equilateral(Point A, Point B, Point C){
     float milieu_AC_x = (A.coordonne_x+C.coordonne_x)/2;
     float milieu_AC_y = (A.coordonne_y+C.coordonne_y)/2;
-    Point H = {"H",H.coordonne_x=milieu_AC_x,H.coordonne_y};
+    Point H = {"H",H.coordonne_x=milieu_AC_x,H.coordonne_y=milieu_AC_y};
     float BH = distance_entre_points(B,H);
     float AC = distance_entre_points(A,C);
     float aire = (AC*BH)/2;
@@ -107,7 +107,7 @@ Triangle is_triangle(Point A, Point B, Point C){
         T1.perimetre=AB+BC+CA; 
         T1.cote1=AB,T1.cote2=BC,T1.cote3=CA;
         if(mesure_angle(A,B,C)==ANGLE_DROIT){
-            float hypothenus =T1.cote3;
+            //float hypothenus =T1.cote3;
             float Aire = aire_triangle_rectangle(T1.cote1,T1.cote2);
             T1.aire=Aire;
             if(T1.cote1==T1.cote2){
@@ -115,7 +115,7 @@ Triangle is_triangle(Point A, Point B, Point C){
             }
         }
         if(mesure_angle(B,C,A)==ANGLE_DROIT){
-            float hypothenus =T1.cote1;
+            //float hypothenus =T1.cote1;
             float Aire = aire_triangle_rectangle(T1.cote2,T1.cote3);
             T1.aire=Aire;
             if(T1.cote3==T1.cote2){
@@ -123,7 +123,7 @@ Triangle is_triangle(Point A, Point B, Point C){
             }
         }
         else{
-            float hypothenus = T1.cote2;
+            //float hypothenus = T1.cote2;
             float Aire = aire_triangle_rectangle(T1.cote1,T1.cote3);
             T1.aire=Aire;
              if(T1.cote3==T1.cote1){
@@ -139,7 +139,7 @@ Quadrilatere is_quadrilatere(Point A, Point B, Point C, Point D){
     float AB = distance_entre_points(Q1.A,Q1.B);
     float BC = distance_entre_points(Q1.B,Q1.C);
     float CD = distance_entre_points(Q1.C,Q1.D);
-    float DA = distance_entre_points(Q1.D,Q1.A);
+    //float DA = distance_entre_points(Q1.D,Q1.A);
     if((mesure_angle(A,B,C)==mesure_angle(B,C,D))&&(mesure_angle(B,C,D)==mesure_angle(C,D,A))&&(mesure_angle(C,D,A)==mesure_angle(D,A,B))){
         if((AB==BC)&&(BC==CD)){
             Q1.figure ="Carre";
