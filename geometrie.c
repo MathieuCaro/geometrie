@@ -4,6 +4,7 @@
 
 #define PI 3.14159265358979323846264338327950288419716939937510
 #define ANGLE_DROIT 90.00
+#define _USE_MATH_DEFINES 
 
 #define RED   "\x1B[31m"
 #define RESET "\x1B[0m"
@@ -48,9 +49,18 @@ typedef struct Triangle{
 
 float distance_entre_points(Point A, Point B){
     struct Segment AB;
-    AB.longueur=sqrt(pow(B.coordonne_x-A.coordonne_x,2)+pow(B.coordonne_y-A.coordonne_y,2));
+    float x_ab_2, y_ab_2;
+    x_ab_2 = pow(B.coordonne_x-A.coordonne_x,2);
+    y_ab_2=pow(B.coordonne_y-A.coordonne_y,2);
+    AB.longueur=sqrt(x_ab_2+y_ab_2);
     return AB.longueur;
 }
+
+float radiantodeg(float angle_value_rad){
+    float angle_value_deg = angle_value_rad*(180/M_PI);
+    return angle_value_deg;
+}
+
 
 float mesure_angle(Point A, Point B, Point C){
     struct Angle ABC;
@@ -59,7 +69,8 @@ float mesure_angle(Point A, Point B, Point C){
     float AB_carre=pow(distance_entre_points(A,B),2);
     float BC_carre=pow(distance_entre_points(B,C),2);
     float AC_carre=pow(distance_entre_points(A,C),2);
-    ABC.valeur = (180/PI)*acos((BC_carre+AB_carre-AC_carre)/(2*BC*AB));
+    float angle_value_rad = acos((BC_carre+AB_carre-AC_carre)/(2*BC*AB));
+    ABC.valeur = radiantodeg(angle_value_rad);
     return ABC.valeur;
 }
 
@@ -88,24 +99,36 @@ float aire_triangle_rectangle(float cote1,float cote2){
     return aire;
 }
 
-
+int is_equilateral(float longueur1,float longueur2,float longueur3){
+    if((longueur1==longueur2)&&(longueur2==longueur3)){
+        return 1;
+    }else{
+        return 0;
+    }
+    
+}
 
 Triangle is_triangle(Point A, Point B, Point C){
     Triangle T1={"",A,B,C};
-    float AB = distance_entre_points(T1.A,T1.B);
-    float BC = distance_entre_points(T1.B,T1.C);
-    float CA = distance_entre_points(T1.C,T1.A);
-    
-    if((AB==BC)&&(BC==CA)){
+    float AB_1 = distance_entre_points(T1.A,T1.B);
+    float BC_1 = distance_entre_points(T1.B,T1.C);
+    float CA_1 = distance_entre_points(T1.C,T1.A);
+    if(is_equilateral(AB_1,BC_1,CA_1)==1){
         T1.figure="Equilateral";
-        T1.cote1=AB;
+        T1.cote1=AB_1;
         T1.aire=aire_triangle_isocele_equilateral(A,B,C);
-        T1.perimetre=AB+BC+CA;
+        T1.perimetre=AB_1+BC_1+CA_1;
+    }
+    if((AB_1==BC_1)&&(BC_1==CA_1)){
+        T1.figure="Equilateral";
+        T1.cote1=AB_1;
+        T1.aire=aire_triangle_isocele_equilateral(A,B,C);
+        T1.perimetre=AB_1+BC_1+CA_1;
     }
     if((mesure_angle(A,B,C)==ANGLE_DROIT)||(mesure_angle(B,C,A)==ANGLE_DROIT)||(mesure_angle(C,A,B)==ANGLE_DROIT)){
         T1.figure="Rectangle";
-        T1.perimetre=AB+BC+CA; 
-        T1.cote1=AB,T1.cote2=BC,T1.cote3=CA;
+        T1.perimetre=AB_1+BC_1+CA_1; 
+        T1.cote1=AB_1,T1.cote2=BC_1,T1.cote3=CA_1;
         if(mesure_angle(A,B,C)==ANGLE_DROIT){
             float hypothenus =T1.cote3;
             float Aire = aire_triangle_rectangle(T1.cote1,T1.cote2);
